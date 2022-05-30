@@ -7,9 +7,6 @@
     "type": "git",
     "url": "{{sshUrl}}"
   },
-  "bugs": {
-    "url": "{{bugsUrl}}"
-  },
   "devDependencies": {
     "browser-sync": "2.27.7",
     "eslint": "8.7.0",
