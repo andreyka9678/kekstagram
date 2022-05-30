@@ -1,4 +1,4 @@
-# Личный проект «Кекстаграмм»
+# Личный проект «Кекстаграм»
 
 * Студент: [Andrey Volkov](https://up.htmlacademy.ru/javascript/25/user/1856745).
 *
