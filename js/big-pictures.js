@@ -32,6 +32,14 @@ const createCommentsFragment = (commentsArray) => {
   commentsList.appendChild(fragment);
 };
 
+// Закрытие окна полноразмерного изображения
+const closeBigPicture = () => {
+  bigPicture.classList.add('hidden');
+  body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onBigPictureEscPress);
+  bigPictureClose.removeEventListener('click', closeBigPicture);
+};
+
 //Создание полноразмерного изображения
 const showBigPhoto = (bigPhoto) => {
   body.classList.add('modal-open');
@@ -42,7 +50,7 @@ const showBigPhoto = (bigPhoto) => {
   bigPicture.querySelector('.social__caption').textContent = bigPhoto.description;
   bigPicture.classList.remove('hidden');
   document.addEventListener('keydown', onBigPictureEscPress);
-  bigPictureClose.addEventListener('click', onBigPictureCloseClick);
+  bigPictureClose.addEventListener('click', closeBigPicture);
   socialCommentCount.firstChild.textContent = `${MAX_COMMENT} из `;
   commentsArrayData = bigPhoto.comments.slice();
   commentsArrayDataRemain = commentsArrayData.slice(MAX_COMMENT);
@@ -73,22 +81,15 @@ function onCommentsLoaderClick () {
     commentsLoader.removeEventListener('click', onCommentsLoaderClick);
   }
 }
-// Закрытие окна полноразмерного изображения
-const closeBigPicture = () => {
-  bigPicture.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onBigPictureEscPress);
-  bigPictureClose.removeEventListener('click', onBigPictureCloseClick);
-};
 
 // Функция закрытия окна полноразмерного изображения по Escape
 function onBigPictureEscPress (evt) {
   getEscapeEvent(evt, closeBigPicture);
 }
 
-//Обработчик закрытия окна кликом по иконке закрытия
-function onBigPictureCloseClick () {
-  closeBigPicture();
-}
+// //Обработчик закрытия окна кликом по иконке закрытия
+// function onBigPictureCloseClick () {
+//   closeBigPicture();
+// }
 
 export {showBigPhoto};
