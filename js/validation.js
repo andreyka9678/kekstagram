@@ -1,4 +1,6 @@
-import {getLength} from './util.js';
+import {getLength, showAlert} from './util.js';
+import {sendData} from './api.js';
+import {onSuccessCloseForm, onErrorCloseForm, blockSubmitButton, unblockSubmitButton} from './form.js';
 
 // Поиск классов для ввода текста и комментариев
 const uploadForm = document.querySelector('.img-upload__form');
@@ -41,11 +43,29 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'text'
 });
 
-//Обработчик отправки
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+//Обработчик отправки формы
+const setUserFormSubmit = (onSuccess) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          onSuccess();
+          onSuccessCloseForm();
+          unblockSubmitButton();
+        },
+        () => {
+          showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+          onErrorCloseForm();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
 
 //Функция деления строки хэштегов по указаннаму элементу separator
 const stringToArray = (string, separator) => string.split(separator);
@@ -112,3 +132,5 @@ pristine.addValidator(inputHashtags, (value) => {
   }
   return false;
 }, errorMessages.SPACE_HASHTAGS);
+
+export {setUserFormSubmit};

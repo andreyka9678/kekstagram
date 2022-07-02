@@ -55,3 +55,5 @@ function onMaxButtonClick() {
 //Создаем события на кнопки изменения масштаба
 minScaleButton.addEventListener('click', onMinButtonClick);
 maxScaleButton.addEventListener('click', onMaxButtonClick);
+
+export {getScaleImageTransform};
