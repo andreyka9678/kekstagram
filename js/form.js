@@ -1,15 +1,15 @@
 import {getEscapeEvent} from './util.js';
 import {getScaleImageTransform} from './scale.js';
 
-//Описание переменных
+// Описание переменных
 const body = document.body;
-const uploadFileInput = document.querySelector('#upload-file');
-const uploadForm = document.querySelector('.img-upload__form');
-const editImageOverlay = document.querySelector('.img-upload__overlay');
-const editImageCloseButton = editImageOverlay.querySelector('.img-upload__cancel');
-const inputHashtags = document.querySelector('.text__hashtags');
-const commentTextarea = document.querySelector('.text__description');
-const imageScaleValue = document.querySelector('.scale__control--value');
+const uploadFileInputNode = document.querySelector('#upload-file');
+const uploadFormNode = document.querySelector('.img-upload__form');
+const editImageOverlayNode = document.querySelector('.img-upload__overlay');
+const editImageCloseButtonNode = editImageOverlayNode.querySelector('.img-upload__cancel');
+const inputHashtagsNode = document.querySelector('.text__hashtags');
+const commentTextAreaNode = document.querySelector('.text__description');
+const imageScaleValueNode = document.querySelector('.scale__control--value');
 const DEFAULT_SCALE_VALUE = 100;
 const imagePreview = document.querySelector('.img-upload__preview');
 const image = imagePreview.querySelector('img');
@@ -17,42 +17,46 @@ const sliderBlock = document.querySelector('.effect-level');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
-//Функция закрытия окна редактора
-const editImageOverlayClose = () => {
-  editImageOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-  uploadForm.reset();
-  document.removeEventListener('keydown', onImageOverlayEscPress);
-  editImageCloseButton.removeEventListener('click', editImageOverlayClose);
-};
-
-//Функция открытия окна редактирования
+// Функция открытия окна редактирования
 const openImageEditOverlay = () => {
   body.classList.add('modal-open');
-  editImageOverlay.classList.remove('hidden');
+  editImageOverlayNode.classList.remove('hidden');
   document.addEventListener('keydown', onImageOverlayEscPress);
-  editImageCloseButton.addEventListener('click', editImageOverlayClose);
-  imageScaleValue.value = `${DEFAULT_SCALE_VALUE}%`;
+  editImageCloseButtonNode.addEventListener('click', onImageOverlayClose);
+  imageScaleValueNode.value = `${DEFAULT_SCALE_VALUE}%`;
   getScaleImageTransform();
   image.style.filter = '';
   sliderBlock.classList.add('hidden');
+  const pristineErrorNode = document.querySelector('.pristine-error');
+  if (pristineErrorNode) {
+    pristineErrorNode.textContent = '';
+  }
 };
 
-// //Обработчик открытия окна редактирования
-// function onUploadChange () {
-//   openImageEditOverlay();
-// }
-uploadFileInput.addEventListener('change', openImageEditOverlay);
+// Обработчик открытия окна редактирования
+function onUploadChange () {
+  openImageEditOverlay();
+}
 
-// //Обработчик закрытия окна редактирования
-// function onImageOverlayClose () {
-//   editImageOverlayClose();
-// }
+uploadFileInputNode.addEventListener('change', onUploadChange);
+// Функция закрытия окна редактора
+const editImageOverlayClose = () => {
+  editImageOverlayNode.classList.add('hidden');
+  body.classList.remove('modal-open');
+  uploadFormNode.reset();
+  document.removeEventListener('keydown', onImageOverlayEscPress);
+  editImageCloseButtonNode.removeEventListener('click', onImageOverlayClose);
+};
 
-//Функция закрытия окна редактора по ESC
+// Обработчик закрытия окна редактирования
+function onImageOverlayClose () {
+  editImageOverlayClose();
+}
+
+// Функция закрытия окна редактора по ESC
 function onImageOverlayEscPress (evt) {
   const active = document.activeElement;
-  if (inputHashtags !== active && commentTextarea !== active) {
+  if (inputHashtagsNode !== active && commentTextAreaNode !== active) {
     getEscapeEvent(evt, editImageOverlayClose);
   }
 }
@@ -65,12 +69,12 @@ const createStatusMessage = (template) => {
   body.appendChild(fragment);
 };
 
-//Создание сообщения об успешной отправке формы
+// Создание сообщения об успешной отправке формы
 const createSuccessMessage = () => {
   createStatusMessage(successTemplate);
 };
 
-//Закрытие сообщения об успешной отправке
+// Закрытие сообщения об успешной отправке
 const closeSuccessMessage = () => {
   const successOverlay = document.querySelector('.success');
   const successMessageButton = successTemplate.querySelector('.success__button');
@@ -79,19 +83,19 @@ const closeSuccessMessage = () => {
   body.removeChild(successOverlay);
 };
 
-//Обработчик закрытия сообщения об успешной отправке
+// Обработчик закрытия сообщения об успешной отправке
 function onSuccessMessageCloseClick () {
   closeSuccessMessage();
 }
 
-//Разблокировка кнопки после отправки
+// Разблокировка кнопки после отправки
 const unblockSubmitButton = () => {
   const uploadFormButton = document.querySelector('.img-upload__submit');
   uploadFormButton.disabled = false;
   uploadFormButton.textContent = 'опубликовать';
 };
 
-//Обработчик закрытия успешной отправки формы
+// Обработчик закрытия успешной отправки формы
 const onSuccessCloseForm = () => {
   createSuccessMessage();
   const successOverlay = document.querySelector('.success');
@@ -106,7 +110,7 @@ const onSuccessCloseForm = () => {
   });
 };
 
-//Блокировка кнопки во время отправки
+// Блокировка кнопки во время отправки
 const blockSubmitButton = () => {
   const uploadFormButton = document.querySelector('.img-upload__submit');
   uploadFormButton.disabled = true;
@@ -124,7 +128,7 @@ const createErrorMessage = () => {
   createStatusMessage(errorTemplate);
 };
 
-//Закрытие сообщения об ошибки при отправке
+// Закрытие сообщения об ошибки при отправке
 const closeErrorMessage = () => {
   const errorOverlay = document.querySelector('.error');
   const errorMessageButton = errorOverlay.querySelector('.error__button');
@@ -158,4 +162,4 @@ const onErrorCloseForm = () => {
   });
 };
 
-export {editImageOverlayClose, unblockSubmitButton, onErrorCloseForm, blockSubmitButton, onSuccessCloseForm};
+export {onImageOverlayClose, editImageOverlayClose, unblockSubmitButton, onErrorCloseForm, blockSubmitButton, onSuccessCloseForm};

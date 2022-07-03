@@ -20,6 +20,7 @@ const hashtagsFeatures = {
   MAX: 20,
   REGULAR: /^#[A-Za-za-Яа-яЁё 0-9]{1,19}$/,
   IS_HASH_SYMBOL: /[^#]/,
+  IS_SPACE: /.#/g,
 };
 
 //Сообщания об ошибках

@@ -1,10 +1,7 @@
 import {showBigPhoto} from './big-pictures.js';
 
-// Находим фрагмент шаблона фотографии
-const templateFragment = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
-//Создаем фрагмент
+// Описание переменных
+const templateFragment = document.querySelector('#picture').content.querySelector('.picture');
 const fragment = document.createDocumentFragment();
 const photosBlock = document.querySelector('.pictures');
 
